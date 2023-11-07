@@ -1,0 +1,14 @@
+.converter-block-result {
+    border: 3px solid #00256f;
+    border-radius: 10px;
+}
+
+.converter-block-result ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.converter-block-result li {
+    display: inline-block;
+    margin: 0 10px;
+}
