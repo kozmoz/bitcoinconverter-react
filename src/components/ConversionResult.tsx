@@ -39,6 +39,7 @@ export function ConversionResult({amount, currency, direction}: Props) {
    * Component initialization. Update the BTC price on interval.
    */
   useEffect(() => {
+    // noinspection JSIgnoredPromiseFromCall
     loadPrices();
     const cancelId = setInterval(loadPrices, 60000 /* One minute. */);
     return () => clearInterval(cancelId);
@@ -48,22 +49,14 @@ export function ConversionResult({amount, currency, direction}: Props) {
    * Determine and cache the ticker price for the active currency.
    */
   const tickerPriceActiveCurrency = useMemo(() => {
-    if (!tickerPrice) {
-      return 0;
-    }
-    return currency === CURRENCY.EUR ? tickerPrice.rateEUR : tickerPrice.rateUSD;
+    return !tickerPrice ? 0 : currency === CURRENCY.EUR ? tickerPrice.rateEUR : tickerPrice.rateUSD;
   }, [currency, tickerPrice]);
 
   /**
    * Calculate and cache new price when something changes.
    */
-  const calculatedResult = useMemo(() => {
-    if (!amount || !tickerPriceActiveCurrency) {
-      return 0;
-    }
-    return direction === CONVERT_DIR.FROM_BTC ? amount * tickerPriceActiveCurrency : amount / tickerPriceActiveCurrency;
-  }, [amount, direction, tickerPriceActiveCurrency]);
-
+  const calculatedResult = !amount || !tickerPriceActiveCurrency ? 0
+    : direction === CONVERT_DIR.FROM_BTC ? amount * tickerPriceActiveCurrency : amount / tickerPriceActiveCurrency;
 
   return (
     <div className="converter-block-result bg-white text-center px-3 py-3 my-3">
